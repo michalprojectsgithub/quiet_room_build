@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chrome Extension Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-image {
+            max-width: 300px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        .test-image:hover {
+            border-color: #667eea;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Chrome Extension Test Page</h1>
+    
+    <div class="instructions">
+        <h3>Testing Instructions:</h3>
+        <ol>
+            <li>Make sure your Drawing Inspiration app is running on <code>http://127.0.0.1:8787</code></li>
+            <li>Right-click on any image below and select "Save to References"</li>
+            <li>Check if you see a notification and visual feedback</li>
+            <li>Check your app's References tab to see if the image appears</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h3>Test Images</h3>
+        <p>Right-click on any of these images to test the extension:</p>
+        
+        <img src="https://picsum.photos/300/200?random=1" alt="Test Image 1" class="test-image" title="Right-click to save to References">
+        <img src="https://picsum.photos/300/200?random=2" alt="Test Image 2" class="test-image" title="Right-click to save to References">
+        <img src="https://picsum.photos/300/200?random=3" alt="Test Image 3" class="test-image" title="Right-click to save to References">
+    </div>
+
+    <div class="test-section">
+        <h3>Connection Status</h3>
+        <div id="connectionStatus">Testing connection...</div>
+        <button onclick="testConnection()">Test Connection</button>
+    </div>
+
+    <div class="test-section">
+        <h3>Extension Status</h3>
+        <div id="extensionStatus">Checking extension...</div>
+    </div>
+
+    <script>
+        // Test connection to the app
+        async function testConnection() {
+            const statusDiv = document.getElementById('connectionStatus');
+            statusDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch('http://127.0.0.1:8787/api/ping');
+                if (response.ok) {
+                    statusDiv.innerHTML = '<div class="status success">✅ Connected to app successfully!</div>';
+                } else {
+                    statusDiv.innerHTML = '<div class="status error">❌ App is running but ping failed</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Cannot connect to app. Make sure it\'s running on http://127.0.0.1:8787</div>';
+            }
+        }
+
+        // Check if extension is installed
+        function checkExtension() {
+            const statusDiv = document.getElementById('extensionStatus');
+            
+            // Try to detect the extension
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                statusDiv.innerHTML = '<div class="status success">✅ Chrome extension API detected</div>';
+            } else {
+                statusDiv.innerHTML = '<div class="status error">❌ Chrome extension API not available</div>';
+            }
+        }
+
+        // Run tests on page load
+        window.onload = function() {
+            testConnection();
+            checkExtension();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+[
+  {
+    "id": "14.40.618",
+    "title": "Self-Portrait",
+    "artist": "Rembrandt van Rijn",
+    "year": 1660,
+    "periods": [],
+    "subjects": [
+      "portrait"
+    ],
+    "techniques": [
+      "painting"
+    ],
+    "imagePath": "library/master_studies/images/rembrandt/rembrandt_van_rijn-self_portrait_1660.jpg",
+    "museum": "The Met",
+    "license": "public domain",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437397"
+  },
+  {
+    "id": "1971.86",
+    "title": "Juan de Pareja (ca. 1608–1670)",
+    "artist": "Diego Velázquez",
+    "year": 1650,
+    "periods": [],
+    "subjects": [
+      "portrait"
+    ],
+    "techniques": [
+      "painting"
+    ],
+    "imagePath": "library/master_studies/images/velazquez/diego_velazquez-juan_de_pareja-1650.jpg",
+    "museum": "The Met",
+    "license": "public domain",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437869"
+  },
+  {
+    "id": "RP-P-OB-697",
+    "title": "Self-portrait in a Cap, Wide-eyed and Open-mouthed",
+    "artist": "Rembrandt van Rijn",
+    "year": 1630,
+    "periods": [],
+    "subjects": [
+      "portrait"
+    ],
+    "techniques": [
+      "drawing"
+    ],
+    "imagePath": "library/master_studies/images/rembrandt/rembrandt_van_rijn-self_portrait_in_a_cap-1630.jpg",
+    "museum": "Rijksmuseum",
+    "license": "public domain",
+    "sourceUrl": "https://www.rijksmuseum.nl/en/collection/object/Self-portrait-in-a-Cap-Wide-eyed-and-Open-mouthed--0af3f07dffd6b10a884dad8c43fff5ce?tab=data"
+  },
+  {
+    "id": "RP-P-OB-5689",
+    "title": "Le Départ pour les champs",
+    "artist": "Claude Lorrain",
+    "year": null,
+    "periods": [],
+    "subjects": [
+      "landscape"
+    ],
+    "techniques": [
+      "drawing"
+    ],
+    "imagePath": "library/master_studies/images/lorrain/le_depart_pour_les_champs-claude_lorrain-1638.jpg",
+    "museum": "Rijksmuseum",
+    "license": "public domain",
+    "sourceUrl": "https://www.rijksmuseum.nl/en/collection/object/Het-vertrek-naar-de-velden--99157462a81310bea7f2a62c0c135889?tab=data"
+  },
+  {
+    "id": "1975.1.297",
+    "title": "Warwick Castle: The East Front",
+    "artist": "Canaletto (Giovanni Antonio Canal)",
+    "year": 1752,
+    "periods": [],
+    "subjects": [
+      "landscape"
+    ],
+    "techniques": [
+      "drawing"
+    ],
+    "imagePath": "library/master_studies/images/canaletto/warwick_castle_the_east_front-canaletto-1752.jpg",
+    "museum": "The Met",
+    "license": "public domain",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/459183"
+  },
+  {
+    "id": "1970.17.34",
+    "title": "Farmhouse in Provence",
+    "artist": "Vincent van Gogh",
+    "year": 1888,
+    "periods": [],
+    "subjects": [
+      "landscape"
+    ],
+    "techniques": [
+      "painting"
+    ],
+    "imagePath": "library/master_studies/images/gogh/farmhouse_in_provence-vincent_van_gogh-1888.jpg",
+    "museum": "National gallery of art",
+    "license": "public domain",
+    "sourceUrl": "https://www.nga.gov/artworks/52178-farmhouse-provence"
+  },
+  {
+    "id": "1922.426",
+    "title": "Bordighera",
+    "artist": "Claude Monet",
+    "year": 1884,
+    "periods": [],
+    "subjects": [
+      "landscape"
+    ],
+    "techniques": [
+      "painting"
+    ],
+    "imagePath": "library/master_studies/images/monet/bordighera-claude_monet-1884.jpg",
+    "museum": "The Art Institute of Chicago",
+    "license": "public domain",
+    "sourceUrl": "https://www.artic.edu/artworks/81537/bordighera"
+  },
+  {
+    "id": "SK-A-2338",
+    "title": "Still Life with Flowers on a Marble Tabletop",
+    "artist": "Rachel Ruysch",
+    "year": 1716,
+    "periods": [],
+    "subjects": [
+      "still life"
+    ],
+    "techniques": [
+      "painting"
+    ],
+    "imagePath": "library/master_studies/images/ruysch/still_life_with_flowers_on_a_marble_tabletop-rachel_ruysch-1716.jpg",
+    "museum": "Rijksmuseum",
+    "license": "public domain",
+    "sourceUrl": "https://www.rijksmuseum.nl/en/collection/object/Still-Life-with-Flowers-on-a-Marble-Tabletop--570d1419506e38cb3916f640fe5a2328?tab=data"
+  },
+  {
+    "id": "51.112.1",
+    "title": "Still Life with Apples and a Pot of Primrose",
+    "artist": "Paul Cézanne",
+    "year": 1890,
+    "periods": [],
+    "subjects": [
+      "still life"
+    ],
+    "techniques": [
+      "painting"
+    ],
+    "imagePath": "library/master_studies/images/cezanne/still_life_with_apples_and_a_pot_of_primroses-paul_cezanne-1890.jpg",
+    "museum": "The Met",
+    "license": "public domain",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/435882"
+  },
+  {
+    "id": "2000.6.1",
+    "title": "Still Life with Figs and Bread",
+    "artist": "Luis Meléndez",
+    "year": 1770,
+    "periods": [],
+    "subjects": [
+      "still life"
+    ],
+    "techniques": [
+      "painting"
+    ],
+    "imagePath": "library/master_studies/images/melendez/still_life_with_figs_and_bread-luis_melendez-1770.jpg",
+    "museum": "National gallery of art",
+    "license": "public domain",
+    "sourceUrl": "https://www.nga.gov/artworks/111627-still-life-figs-and-bread"
+  }
+]

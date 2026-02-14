@@ -1,0 +1,185 @@
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: var(--space-8);
+  border-radius: 0;
+  background: var(--color-bg-app);
+  color: var(--color-text-primary);
+  font-family: system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, sans-serif;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  transition: all var(--motion-slow) var(--motion-standard);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Main Content */
+.app-content {
+  max-width: none;
+  margin: 0;
+  padding: 0 var(--space-6) var(--space-10);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+  width: 100%;
+  opacity: 1;
+}
+
+/* Generate Section */
+.generate-section {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10);
+  box-shadow: var(--shadow-medium);
+  margin-top: var(--space-5);
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-bottom: var(--space-7);
+}
+
+.prompt-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  font-family: inherit;
+  resize: vertical;
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  transition: border-color var(--motion-normal) var(--motion-standard),
+    box-shadow var(--motion-normal) var(--motion-standard);
+}
+
+.prompt-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(124, 111, 242, 0.25);
+}
+
+.generate-button {
+  background: linear-gradient(135deg, #7c6ff2 0%, #5f7cf9 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--motion-normal) var(--motion-standard);
+  align-self: flex-start;
+}
+
+.generate-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+.generate-button:disabled {
+  background: var(--color-text-disabled);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Error Message */
+.error-message {
+  background: rgba(242, 109, 109, 0.12);
+  color: #f26d6d;
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-5);
+  border: 1px solid rgba(242, 109, 109, 0.3);
+  text-align: center;
+}
+
+/* Result Section */
+.result-section {
+  text-align: center;
+  margin-top: var(--space-7);
+}
+
+.result-section h3 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-5);
+  font-size: var(--font-size-xl);
+}
+
+.generated-image {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-medium);
+  transition: transform var(--motion-normal) var(--motion-standard);
+}
+
+.generated-image:hover {
+  transform: scale(1.02);
+}
+
+/* Result Actions */
+.result-actions {
+  margin-top: var(--space-5);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.search-reference-button {
+  background: linear-gradient(135deg, #3ccb7f 0%, #2fb36c 100%);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--motion-normal) var(--motion-standard);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.search-reference-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(60, 203, 127, 0.35);
+  background: linear-gradient(135deg, #2fb36c 0%, #289b5d 100%);
+}
+
+.search-reference-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .generate-section {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .generate-section {
+    padding: 20px 15px;
+  }
+  
+  .prompt-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}

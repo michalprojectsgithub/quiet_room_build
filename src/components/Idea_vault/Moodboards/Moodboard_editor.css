@@ -1,0 +1,834 @@
+/* Moodboard Editor Styles */
+
+/* Overlay and Container */
+.moodboard-editor-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  backdrop-filter: blur(10px);
+}
+
+.moodboard-editor-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+}
+
+/* Header */
+.moodboard-editor-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-5) var(--space-7) var(--space-2);
+  background: var(--color-surface-raised);
+  border-bottom: 1px solid var(--color-border-default);
+  flex-shrink: 0;
+}
+
+.moodboard-editor-header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  max-width: 100%;
+}
+
+.moodboard-editor-title-section {
+  display: flex;
+  align-items: center;
+}
+
+.moodboard-editor-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: color var(--motion-normal) var(--motion-standard);
+  user-select: none;
+}
+
+.moodboard-editor-title:hover {
+  color: #3B82F6;
+}
+
+.moodboard-editor-title-edit {
+  display: flex;
+  align-items: center;
+}
+
+.moodboard-editor-title-input {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  background: transparent;
+  border: 2px solid #3B82F6;
+  border-radius: 6px;
+  padding: 4px 8px;
+  outline: none;
+  min-width: 200px;
+  font-family: inherit;
+}
+
+.moodboard-editor-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.moodboard-editor-button {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  padding: 0 16px;
+  height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--motion-normal) var(--motion-standard);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.moodboard-editor-button:hover {
+  background: var(--color-surface-active);
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+.moodboard-editor-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.moodboard-editor-button-cancel {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-subtle);
+}
+
+.moodboard-editor-button-cancel:hover {
+  background: var(--color-surface-active);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-default);
+}
+
+.moodboard-editor-button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-glow);
+}
+
+/* Canvas */
+.moodboard-editor-canvas-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 20px 30px 30px;
+  background: #121212;
+}
+
+.moodboard-editor-canvas {
+  position: relative;
+  background: #1a1a1a;
+  overflow: hidden;
+  cursor: default;
+  outline: none; /* Remove focus outline */
+  transition: all 0.2s ease;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  border: 1px solid #2a2a2a;
+}
+
+.moodboard-editor-canvas:focus {
+  /* Optional: Add a subtle focus indicator */
+  box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Drag and drop visual feedback */
+.moodboard-editor-canvas.drag-over {
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px dashed rgba(59, 130, 246, 0.5);
+  box-shadow: inset 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Items */
+.moodboard-editor-item {
+  position: absolute;
+  cursor: move;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+  user-select: none;
+}
+
+.moodboard-editor-item.selected {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.moodboard-editor-item:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* Image items */
+.moodboard-editor-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  border-radius: 4px;
+}
+
+/* Image-specific item styling */
+.moodboard-editor-item.image-item {
+  /* Keep the container border but make it more subtle for images */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+  user-select: none;
+  overflow: visible;
+  /* Make the border fit the image content */
+  background-clip: content-box;
+}
+
+.moodboard-editor-item.image-item.selected {
+  /* No border when selected - only show on hover */
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.moodboard-editor-item.image-item:hover {
+  /* Show container border on hover */
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+/* Remove the separate selection indicator styles */
+.moodboard-editor-image-selection-indicator {
+  display: none;
+}
+
+/* Text items */
+.moodboard-editor-text {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+  line-height: 1.4;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  pointer-events: auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  white-space: pre-wrap;
+}
+
+
+
+.moodboard-editor-text .moodboard-editor-textarea {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  color: #333;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: inherit;
+  padding: 20px;
+  border-radius: 0;
+  pointer-events: auto;
+  box-shadow: none;
+  cursor: text;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: pre-wrap;
+}
+
+.moodboard-editor-text span {
+  cursor: text;
+}
+
+/* Color items */
+.moodboard-editor-color {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+/* Resize handle */
+.moodboard-editor-resize-handle {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  background: #3B82F6;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  cursor: nw-resize;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+  opacity: 0;
+}
+
+.moodboard-editor-item:hover .moodboard-editor-resize-handle {
+  opacity: 1;
+}
+
+/* Delete button */
+.moodboard-editor-delete-button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  aspect-ratio: 1 / 1;
+  background: #dc2626;
+  color: white;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.moodboard-editor-delete-button::before {
+  content: "×";
+  font-size: 14px;
+  line-height: 1;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moodboard-editor-delete-button:hover {
+  background: #b91c1c;
+  transform: scale(1.1);
+}
+
+/* Delete button for images - positioned within image boundaries */
+.moodboard-editor-delete-button.image-delete-button {
+  /* Default positioning is overridden by inline styles for proper image content positioning */
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.moodboard-editor-item.image-item:hover .moodboard-editor-delete-button.image-delete-button {
+  opacity: 1;
+}
+
+.moodboard-editor-delete-button.image-delete-button:hover {
+  background: #b91c1c;
+  transform: scale(1.1);
+}
+
+/* Delete button for color swatches - hide until hover */
+.moodboard-editor-delete-button.color-delete-button {
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.moodboard-editor-item.color-item:hover .moodboard-editor-delete-button.color-delete-button {
+  opacity: 1;
+}
+
+.moodboard-editor-delete-button.color-delete-button:hover {
+  background: #b91c1c;
+  transform: scale(1.1);
+}
+
+.moodboard-editor-preview-button {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 28px;
+  height: 28px;
+  background: rgba(11, 11, 11, 0.85);
+  color: #ffffff;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 12;
+}
+
+.moodboard-editor-item.image-item:hover .moodboard-editor-preview-button {
+  opacity: 1;
+}
+
+.moodboard-editor-preview-button:hover {
+  background: #111111;
+  border-color: #444444;
+  transform: translateY(-1px);
+}
+
+.moodboard-editor-preview-icon {
+  display: block;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.moodboard-preview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+  padding: var(--space-8);
+  backdrop-filter: blur(10px);
+}
+
+.moodboard-preview-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-strong);
+  padding: var(--space-4);
+}
+
+.moodboard-preview-image {
+  max-width: calc(100vw - 120px);
+  max-height: calc(100vh - 120px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  box-shadow: var(--shadow-soft);
+  border-radius: var(--radius-sm);
+}
+
+.moodboard-preview-close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  transition: all var(--motion-normal) var(--motion-standard);
+  z-index: 1;
+  box-shadow: var(--shadow-soft);
+}
+
+.moodboard-preview-close:hover {
+  background: var(--color-surface-active);
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+/* Modal Styles */
+.moodboard-editor-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+  backdrop-filter: blur(10px);
+}
+
+.moodboard-editor-modal-content {
+  background: var(--color-surface-raised);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-default);
+  box-shadow: var(--shadow-strong);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.moodboard-editor-modal-content h3 {
+  margin: 0 0 var(--space-5);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.moodboard-editor-modal-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.moodboard-editor-modal .moodboard-editor-button {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-weight: var(--font-weight-semibold);
+  background: var(--color-accent);
+  color: #ffffff;
+  border: 1px solid var(--color-accent);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+.moodboard-editor-modal .moodboard-editor-button:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.moodboard-editor-modal .moodboard-editor-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.moodboard-editor-modal .moodboard-editor-button.moodboard-editor-button-cancel {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+}
+
+.moodboard-editor-modal .moodboard-editor-button.moodboard-editor-button-cancel:hover {
+  background: var(--color-surface-active);
+  border-color: var(--color-border-strong);
+}
+
+/* Modal Tabs */
+.moodboard-editor-modal-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border-default);
+  padding-bottom: var(--space-4);
+}
+
+.moodboard-editor-tab {
+  background: var(--color-surface-raised);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-subtle);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+.moodboard-editor-tab:hover {
+  background: var(--color-surface-active);
+  color: var(--color-text-primary);
+}
+
+.moodboard-editor-tab.active {
+  background: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Modal Sections */
+.moodboard-editor-modal-section {
+  margin-bottom: var(--space-5);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.moodboard-editor-modal-section label {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.moodboard-editor-modal-section small {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.moodboard-editor-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: var(--space-3);
+  transition: border-color var(--motion-normal) var(--motion-standard),
+    box-shadow var(--motion-normal) var(--motion-standard);
+}
+
+.moodboard-editor-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Text Controls */
+.moodboard-editor-text-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.moodboard-editor-color-picker {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: none;
+  box-shadow: var(--shadow-soft);
+}
+
+.moodboard-editor-color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.moodboard-editor-color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: var(--radius-sm);
+}
+
+.moodboard-editor-font-size {
+  flex: 1;
+  height: 6px;
+  background: var(--color-surface-active);
+  border-radius: var(--radius-pill);
+  outline: none;
+  cursor: pointer;
+}
+
+.moodboard-editor-font-size::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+}
+
+.moodboard-editor-font-size::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Color Picker Styles */
+.simple-color-picker {
+  max-width: 400px !important;
+  width: 95% !important;
+}
+
+.color-picker-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.color-picker-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.color-picker-section label {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.native-color-picker {
+  width: 80px;
+  height: 80px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+
+.native-color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: var(--radius-md);
+}
+
+.native-color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.color-preview-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  justify-content: center;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.color-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-border-strong);
+  box-shadow: var(--shadow-soft);
+}
+
+.color-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.hex-input {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  background: var(--color-surface-active);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  outline: none;
+  transition: border-color var(--motion-normal) var(--motion-standard),
+    box-shadow var(--motion-normal) var(--motion-standard);
+}
+
+.hex-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .moodboard-editor-header {
+    padding: 15px 20px;
+  }
+  
+  .moodboard-editor-title {
+    font-size: 20px;
+  }
+  
+  .moodboard-editor-controls {
+    gap: 8px;
+  }
+  
+  .moodboard-editor-button {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .moodboard-editor-modal-content {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  /* Color Picker Mobile Styles */
+  .simple-color-picker {
+    max-width: 95% !important;
+    margin: 10px;
+  }
+
+  .color-picker-section {
+    padding: 16px;
+  }
+
+  .native-color-picker {
+    width: 60px;
+    height: 60px;
+  }
+
+  .color-preview-section {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .color-preview {
+    width: 50px;
+    height: 50px;
+  }
+
+  .hex-input {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+}

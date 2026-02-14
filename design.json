@@ -1,0 +1,249 @@
+{
+  "meta": {
+    "name": "Drawing Inspo Design System",
+    "version": "1.0",
+    "source": "UI Components reference screenshot",
+    "tone": "dark, soft glow, high contrast, minimal",
+    "notes": "Use this as the single source of truth for UI visuals. Preserve existing functionality."
+  },
+  "principles": [
+    "Dark, calm workspace with layered surfaces",
+    "Subtle glow and soft shadows instead of hard borders",
+    "Clear hierarchy via size, weight, and contrast",
+    "Controls feel tactile but restrained",
+    "Consistency over novelty: reuse scales and tokens"
+  ],
+  "colorPalette": {
+    "background": {
+      "app": "#0B0D10",
+      "canvas": "#0E1116",
+      "surface": "#141820",
+      "surfaceRaised": "#1A1F2A",
+      "surfaceActive": "#202736"
+    },
+    "text": {
+      "primary": "#E7EAF0",
+      "secondary": "#B3BAC7",
+      "muted": "#7D8594",
+      "disabled": "#5A6170"
+    },
+    "border": {
+      "subtle": "#252B36",
+      "default": "#2E3542",
+      "strong": "#3A4456"
+    },
+    "accent": {
+      "primary": "#7C6FF2",
+      "primaryHover": "#8A7AF7",
+      "primaryActive": "#6B5BEA",
+      "glow": "#6E7BFF"
+    },
+    "status": {
+      "success": "#3CCB7F",
+      "warning": "#F7B955",
+      "danger": "#F26D6D",
+      "info": "#5BB0FF"
+    }
+  },
+  "typography": {
+    "fontFamily": "system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, sans-serif",
+    "scale": {
+      "xs": "12px",
+      "sm": "13px",
+      "md": "14px",
+      "lg": "16px",
+      "xl": "18px",
+      "2xl": "22px",
+      "3xl": "28px"
+    },
+    "weights": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lineHeights": {
+      "tight": 1.2,
+      "normal": 1.45,
+      "relaxed": 1.6
+    },
+    "letterSpacing": {
+      "tight": "-0.01em",
+      "normal": "0em",
+      "wide": "0.02em"
+    }
+  },
+  "spacing": {
+    "unit": 4,
+    "scale": {
+      "0": "0px",
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "7": "28px",
+      "8": "32px",
+      "10": "40px",
+      "12": "48px",
+      "16": "64px"
+    }
+  },
+  "radii": {
+    "xs": "6px",
+    "sm": "8px",
+    "md": "12px",
+    "lg": "16px",
+    "xl": "20px",
+    "pill": "999px"
+  },
+  "shadows": {
+    "soft": "0 6px 24px rgba(0,0,0,0.35)",
+    "medium": "0 10px 30px rgba(0,0,0,0.45)",
+    "strong": "0 18px 40px rgba(0,0,0,0.6)",
+    "glow": "0 0 0 1px rgba(124,111,242,0.25), 0 6px 24px rgba(124,111,242,0.25)"
+  },
+  "motion": {
+    "duration": {
+      "fast": "120ms",
+      "normal": "200ms",
+      "slow": "320ms"
+    },
+    "easing": {
+      "standard": "cubic-bezier(0.2, 0.7, 0.2, 1)",
+      "exit": "cubic-bezier(0.4, 0, 1, 1)"
+    }
+  },
+  "layout": {
+    "container": {
+      "maxWidth": "1200px",
+      "padX": "24px",
+      "padY": "24px",
+      "cardGap": "16px"
+    },
+    "grid": {
+      "gap": "12px",
+      "tileRadius": "12px"
+    }
+  },
+  "components": {
+    "button": {
+      "base": {
+        "height": "36px",
+        "paddingX": "16px",
+        "radius": "10px",
+        "fontWeight": 600
+      },
+      "primary": {
+        "bg": "accent.primary",
+        "text": "#FFFFFF",
+        "hover": "accent.primaryHover",
+        "active": "accent.primaryActive"
+      },
+      "secondary": {
+        "bg": "surfaceRaised",
+        "text": "text.primary",
+        "border": "border.default"
+      },
+      "ghost": {
+        "bg": "transparent",
+        "text": "text.secondary",
+        "border": "border.subtle"
+      },
+      "outline": {
+        "bg": "transparent",
+        "text": "text.primary",
+        "border": "border.default"
+      }
+    },
+    "iconButton": {
+      "size": "32px",
+      "radius": "999px",
+      "bg": "surfaceRaised",
+      "hover": "surfaceActive"
+    },
+    "input": {
+      "height": "36px",
+      "radius": "10px",
+      "bg": "surface",
+      "text": "text.primary",
+      "border": "border.default",
+      "focusRing": "accent.glow"
+    },
+    "select": {
+      "height": "36px",
+      "radius": "10px",
+      "bg": "surface",
+      "border": "border.default",
+      "caret": "accent.primary"
+    },
+    "card": {
+      "bg": "surface",
+      "radius": "12px",
+      "border": "border.subtle",
+      "shadow": "soft"
+    },
+    "header": {
+      "titleSize": "typography.scale.3xl",
+      "titleWeight": "typography.weights.bold",
+      "titleColor": "text.primary",
+      "subtitleSize": "typography.scale.lg",
+      "subtitleColor": "text.muted",
+      "spacingBottom": "spacing.scale.4",
+      "dividerColor": "border.default",
+      "dividerHeight": "1px"
+    },
+    "tab": {
+      "pill": true,
+      "radius": "999px",
+      "bg": "surfaceRaised",
+      "activeBg": "accent.primary",
+      "activeText": "#FFFFFF"
+    },
+    "modal": {
+      "bg": "surfaceRaised",
+      "radius": "16px",
+      "shadow": "strong",
+      "backdrop": "rgba(0,0,0,0.6)"
+    },
+    "fullscreenViewer": {
+      "backdrop": "rgba(0,0,0,0.85)",
+      "actionButtonBg": "surfaceRaised",
+      "actionButtonBorder": "border.strong",
+      "actionButtonText": "text.primary",
+      "actionButtonRadius": "radii.sm",
+      "actionButtonShadow": "shadows.soft",
+      "linkedRefBg": "rgba(20,24,32,0.7)",
+      "linkedRefBorder": "border.default",
+      "linkedRefRadius": "radii.sm"
+    },
+    "badge": {
+      "radius": "999px",
+      "bg": "surfaceActive",
+      "text": "text.secondary"
+    },
+    "tooltip": {
+      "bg": "#0F1218",
+      "text": "text.secondary",
+      "radius": "8px"
+    }
+  },
+  "interactionStates": {
+    "hover": {
+      "brightness": 1.08,
+      "lift": "-1px"
+    },
+    "active": {
+      "brightness": 0.98,
+      "lift": "0px"
+    },
+    "focus": {
+      "ring": "0 0 0 2px rgba(124,111,242,0.4)"
+    },
+    "disabled": {
+      "opacity": 0.5,
+      "cursor": "not-allowed"
+    }
+  }
+}

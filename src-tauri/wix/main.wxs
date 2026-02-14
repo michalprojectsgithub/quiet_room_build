@@ -1,0 +1,282 @@
+<?if $(sys.BUILDARCH)="x86"?>
+    <?define Win64 = "no" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
+<?elseif $(sys.BUILDARCH)="x64"?>
+    <?define Win64 = "yes" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+<?elseif $(sys.BUILDARCH)="arm64"?>
+    <?define Win64 = "yes" ?>
+    <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
+<?else?>
+    <?error Unsupported value of sys.BUILDARCH=$(sys.BUILDARCH)?>
+<?endif?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product
+            Id="*"
+            Name="Quiet room"
+            UpgradeCode="29ffb83a-9ef8-5261-8219-1889acb51bb9"
+            Language="!(loc.TauriLanguage)"
+            Manufacturer="drawing"
+            Version="1.0.0">
+
+        <Package Id="*"
+                 Keywords="Installer"
+                 InstallerVersion="450"
+                 Languages="0"
+                 Compressed="yes"
+                 InstallScope="perMachine"
+                 SummaryCodepage="!(loc.TauriCodepage)"/>
+
+        <!-- https://docs.microsoft.com/en-us/windows/win32/msi/reinstallmode -->
+        <!-- reinstall all files; rewrite all registry entries; reinstall all shortcuts -->
+        <Property Id="REINSTALLMODE" Value="amus" />
+
+        <!-- Auto launch app after installation, useful for passive mode which usually used in updates -->
+        <Property Id="AUTOLAUNCHAPP" Secure="yes" />
+        <!-- Property to forward cli args to the launched app to not lose those of the pre-update instance -->
+        <Property Id="LAUNCHAPPARGS" Secure="yes" />
+
+            <MajorUpgrade Schedule="afterInstallInitialize" AllowDowngrades="yes" />
+
+        <InstallExecuteSequence>
+            <RemoveShortcuts>Installed AND NOT UPGRADINGPRODUCTCODE</RemoveShortcuts>
+        </InstallExecuteSequence>
+
+        <Media Id="1" Cabinet="app.cab" EmbedCab="yes" />
+
+
+        <Icon Id="ProductIcon" SourceFile="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\target\release\resources\icon.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="ProductIcon" />
+        <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />      <!-- Remove repair -->
+        <SetProperty Id="ARPNOMODIFY" Value="1" After="InstallValidate" Sequence="execute"/>
+
+        <!-- initialize with previous InstallDir -->
+        <Property Id="INSTALLDIR">
+            <RegistrySearch Id="PrevInstallDirReg" Root="HKCU" Key="Software\drawing\Quiet room" Name="InstallDir" Type="raw"/>
+        </Property>
+
+        <!-- launch app checkbox -->
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="!(loc.LaunchApp)" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
+        <CustomAction Id="LaunchApplication" Impersonate="yes" FileKey="Path" ExeCommand="[LAUNCHAPPARGS]" Return="asyncNoWait" />
+
+        <UI>
+            <!-- launch app checkbox -->
+            <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
+
+            <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+
+            <!-- Skip license dialog -->
+            <Publish Dialog="WelcomeDlg"
+                     Control="Next"
+                     Event="NewDialog"
+                     Value="InstallDirDlg"
+                     Order="2">1</Publish>
+            <Publish Dialog="InstallDirDlg"
+                     Control="Back"
+                     Event="NewDialog"
+                     Value="WelcomeDlg"
+                     Order="2">1</Publish>
+        </UI>
+
+        <UIRef Id="WixUI_InstallDir" />
+
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="DesktopFolder" Name="Desktop">
+                <Component Id="ApplicationShortcutDesktop" Guid="*">
+                    <Shortcut Id="ApplicationDesktopShortcut" Name="Quiet room" Description="Runs Quiet room" Target="[!Path]" WorkingDirectory="INSTALLDIR" Icon="ProductIcon" />
+                    <RemoveFolder Id="DesktopFolder" On="uninstall" />
+                    <RegistryValue Root="HKCU" Key="Software\drawing\Quiet room" Name="Desktop Shortcut" Type="integer" Value="1" KeyPath="yes" />
+                </Component>
+            </Directory>
+            <Directory Id="$(var.PlatformProgramFilesFolder)" Name="PFiles">
+                <Directory Id="INSTALLDIR" Name="Quiet room"/>
+            </Directory>
+            <Directory Id="ProgramMenuFolder">
+                <Directory Id="ApplicationProgramsFolder" Name="Quiet room"/>
+            </Directory>
+        </Directory>
+
+        <DirectoryRef Id="INSTALLDIR">
+            <Component Id="RegistryEntries" Guid="*">
+                <RegistryKey Root="HKCU" Key="Software\drawing\Quiet room">
+                    <RegistryValue Name="InstallDir" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
+                </RegistryKey>
+            </Component>
+            <Component Id="Path" Guid="3a1026e7-8344-5edd-93f5-430ab595acec" Win64="$(var.Win64)">
+                <File Id="Path" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\target\release\Quiet room.exe" KeyPath="yes" Checksum="yes"/>
+            </Component>
+            <Directory Id="I568f3f3179c046f0bd0ac54244b2288a" Name="_up_"><Directory Id="Ie1a535a9527a47b5a0423ee222fcbf0e" Name="library"><Directory Id="Iac3f5e7dac9648cbb05fee08640c3cfe" Name="livestreams"><Component Id="I90e43fd028514fbc9af359109c360a99" Guid="53015078-4fa5-477c-ab24-04a85c4bbe03" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I90e43fd028514fbc9af359109c360a99" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\livestreams\yt_stream_list.json" /></Component></Directory><Directory Id="I144bdb640c6f4ac293aed8844fea26b4" Name="master_studies"><Directory Id="Ibeafeea13f954eb8a974c2c659d1b98b" Name="data"><Component Id="I1fde3be0a8524ec78af4c0b28c15255c" Guid="84c3ab8c-d36c-4cc3-a7be-dd4780d6c917" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I1fde3be0a8524ec78af4c0b28c15255c" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\data\convert_to_masterstudy_json.py" /></Component><Component Id="I405af73663ad425d91015c30bd4ddff6" Guid="15c97846-7dd2-497e-b32a-a3c6fdf9a4db" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I405af73663ad425d91015c30bd4ddff6" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\data\generate_thumbnails.py" /></Component><Component Id="I8eb6142cbeb7485dabefcbec98d4222c" Guid="54df8df7-bcb2-489c-9517-79741ddc5f35" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I8eb6142cbeb7485dabefcbec98d4222c" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\data\masterstudy.json" /></Component><Component Id="Ic411f1c51a2a49d599a177abcb181336" Guid="3edccbe4-a76e-4b9c-aa29-6d7e48dcb6c5" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ic411f1c51a2a49d599a177abcb181336" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\data\master_studies_data.ods" /></Component></Directory><Directory Id="I4c7b0159973a45878a9fe23d5891a373" Name="images"><Directory Id="Idcfddb38687e45ecab29d7f0799a20c5" Name="canaletto"><Component Id="Ideca47f450fb496ba8fd611a5d2caae3" Guid="d8a51563-f91e-427b-b20f-fdc4c16f380b" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ideca47f450fb496ba8fd611a5d2caae3" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\canaletto\warwick_castle_the_east_front-canaletto-1752.jpg" /></Component></Directory><Directory Id="Iaea5275f496649c59c04638b480af33e" Name="cezanne"><Component Id="I64c126579ce5423395f56a3c530ee1bc" Guid="2d411900-2dd9-4d29-84d1-e4d5b8b08fed" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I64c126579ce5423395f56a3c530ee1bc" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\cezanne\still_life_with_apples_and_a_pot_of_primroses-paul_cezanne-1890.jpg" /></Component></Directory><Directory Id="I86164552e70e4f3c8907c72a4341dfe0" Name="gogh"><Component Id="I7f04851f98564599a5975367b8100f20" Guid="e6c5dc3b-3914-4e7e-ac22-729ed998a849" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I7f04851f98564599a5975367b8100f20" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\gogh\farmhouse_in_provence-vincent_van_gogh-1888.jpg" /></Component></Directory><Directory Id="I242d8802cd644faa931bd86215492e94" Name="lorrain"><Component Id="Ie2da920706b4452195b1c83e6643a7a1" Guid="3deee52f-efab-4c0e-8d2d-b42f1feb2508" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ie2da920706b4452195b1c83e6643a7a1" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\lorrain\le_depart_pour_les_champs-claude_lorrain-1638.jpg" /></Component></Directory><Directory Id="Ib015ce4d0025403d83f048524ddbdc3c" Name="melendez"><Component Id="Ic777c7735c9442a580dc787341e556dd" Guid="89307461-7c58-41ba-a4e6-fc1ce75a5a21" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ic777c7735c9442a580dc787341e556dd" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\melendez\still_life_with_figs_and_bread-luis_melendez-1770.jpg" /></Component></Directory><Directory Id="I03fc927f98fd4b3bad64b6f33ed46f74" Name="monet"><Component Id="I70d215d071cd4fd19497a3ea65aa0ac1" Guid="fd2486cc-bb37-41d6-8fb3-c97e526cfaf6" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I70d215d071cd4fd19497a3ea65aa0ac1" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\monet\bordighera-claude_monet-1884.jpg" /></Component></Directory><Directory Id="I591a58f113b34749ab5b5984344bf985" Name="rembrandt"><Component Id="I6397e28e788b447fb0d14ffa652afa93" Guid="1b46a2f9-9b58-451b-886e-0bedaea704c7" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I6397e28e788b447fb0d14ffa652afa93" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\rembrandt\rembrandt_van_rijn-self_portrait_1660.jpg" /></Component><Component Id="Ie7ac361b2c2b455d84fc0a1e9621dbab" Guid="0138c713-20cb-41f9-a931-bcc0b08b548b" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ie7ac361b2c2b455d84fc0a1e9621dbab" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\rembrandt\rembrandt_van_rijn-self_portrait_in_a_cap-1630.jpg" /></Component></Directory><Directory Id="Ie2685bfe52084a2bbc59e86fd2817323" Name="ruysch"><Component Id="I4bb1945042fd4bad94f992a32c45b55a" Guid="d55719e0-6afb-4ad1-8cf9-4cc636eddbd6" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I4bb1945042fd4bad94f992a32c45b55a" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\ruysch\still_life_with_flowers_on_a_marble_tabletop-rachel_ruysch-1716.jpg" /></Component></Directory><Directory Id="Ica72ff309b44434a932ee7ae65cf9e49" Name="velazquez"><Component Id="I386693a99d4841f8823c8551979dc88c" Guid="9c7cd46e-b936-41ee-ba81-ce10022585f0" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I386693a99d4841f8823c8551979dc88c" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\images\velazquez\diego_velazquez-juan_de_pareja-1650.jpg" /></Component></Directory></Directory><Directory Id="I6f6af0547a1b4f0093a0299bca77be86" Name="thumbnails"><Directory Id="Ia3bcc44e9b7d4d5ba4867ed5409cc4b0" Name="canaletto"><Component Id="Ibeff87a4aa5c46df8045f1b2ab10b92c" Guid="f151967e-0eb4-4301-8cf3-f32bb2f6e48b" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ibeff87a4aa5c46df8045f1b2ab10b92c" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\canaletto\warwick_castle_the_east_front-canaletto-1752.webp" /></Component></Directory><Directory Id="I91b759477fec47458c4085cf956f8583" Name="cezanne"><Component Id="I3dd0254f43ef4e359938f4a74bc8fa2b" Guid="d15d233b-eb53-4ed9-ba4a-fb8e59aa1dd3" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I3dd0254f43ef4e359938f4a74bc8fa2b" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\cezanne\still_life_with_apples_and_a_pot_of_primroses-paul_cezanne-1890.webp" /></Component></Directory><Directory Id="I97b085705e6d4276b24b5e64bfe1c59f" Name="gogh"><Component Id="I052fbcaca0a64a21aa49791049131081" Guid="084070ed-dee5-4ab7-93b6-fcb56c08a5cc" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I052fbcaca0a64a21aa49791049131081" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\gogh\farmhouse_in_provence-vincent_van_gogh-1888.webp" /></Component></Directory><Directory Id="I4a7f294a3d174a1ea546a1efd39d60e6" Name="lorrain"><Component Id="Ib5c5ac4132194f75ab62f414c0f0bd62" Guid="8e8df6b7-ed81-4d5f-9e11-4ee583b78288" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ib5c5ac4132194f75ab62f414c0f0bd62" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\lorrain\le_depart_pour_les_champs-claude_lorrain-1638.webp" /></Component></Directory><Directory Id="I1b179c78af754e59bb8ffe675efa50d5" Name="melendez"><Component Id="Iac3e6674f6094481921a498ebd6f4b8b" Guid="78cfb3a5-d667-44e1-b007-4ba1801d7b50" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Iac3e6674f6094481921a498ebd6f4b8b" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\melendez\still_life_with_figs_and_bread-luis_melendez-1770.webp" /></Component></Directory><Directory Id="I67726756381a47689d535169109ff745" Name="monet"><Component Id="I7f503f50012e48b988af1de9242ea7fa" Guid="e21bb3aa-ff00-446e-a5d7-f5bddfe2c341" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I7f503f50012e48b988af1de9242ea7fa" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\monet\bordighera-claude_monet-1884.webp" /></Component></Directory><Directory Id="I864276a6463546e2aaf8bcdb162ba158" Name="rembrandt"><Component Id="Ida70826fdad643efbd5c8911e50551a7" Guid="3439fb97-754e-400c-b5fd-3bc7475aa2f3" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ida70826fdad643efbd5c8911e50551a7" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\rembrandt\rembrandt_van_rijn-self_portrait_1660.webp" /></Component><Component Id="I900e7f24962d4f058a9ca2511844d2d5" Guid="291a0957-2fbe-48dd-847a-79eae841f22f" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I900e7f24962d4f058a9ca2511844d2d5" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\rembrandt\rembrandt_van_rijn-self_portrait_in_a_cap-1630.webp" /></Component></Directory><Directory Id="I6929ad8e18bd4115833fd17312ebf82e" Name="ruysch"><Component Id="Iac5d32822e78441e9ef3a217ad926911" Guid="5a89d290-fd62-4666-9089-497a0f0008c1" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Iac5d32822e78441e9ef3a217ad926911" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\ruysch\still_life_with_flowers_on_a_marble_tabletop-rachel_ruysch-1716.webp" /></Component></Directory><Directory Id="I5973bab267644d129f604edb04861e85" Name="velazquez"><Component Id="Idd766c327e0e437194022e2c821ca19c" Guid="0402385c-c07c-4ddc-80cc-b8ae2715624f" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Idd766c327e0e437194022e2c821ca19c" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\master_studies\thumbnails\velazquez\diego_velazquez-juan_de_pareja-1650.webp" /></Component></Directory></Directory></Directory><Directory Id="Ie0688a06bcc04687ad02c68b053c3f13" Name="warmups"><Component Id="I589406e2947f4dd1bf7c2ecf7bdb0efb" Guid="07457fa0-97dc-4f3c-a1af-a83a30b7b836" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I589406e2947f4dd1bf7c2ecf7bdb0efb" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1887.252 - View of Ponte Lugano on the Anio, from Views of....jpg" /></Component><Component Id="I134fd621bf98430b8cadb90b77350d3b" Guid="715469b8-c37c-47da-ab79-ef40c1745631" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I134fd621bf98430b8cadb90b77350d3b" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1887.456 - The Bull.jpg" /></Component><Component Id="Ie3f7a319797948d58671e373613bd4aa" Guid="a27096ac-b4a1-488c-8da2-fdf14d1ce25c" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ie3f7a319797948d58671e373613bd4aa" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1922.5518 - Jockey.jpg" /></Component><Component Id="I112c998ff26b475dae54444c4e779fc6" Guid="efcb7088-416c-4b73-820e-3fe898a26baa" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I112c998ff26b475dae54444c4e779fc6" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1933.895 - Caricature of a Man with a Large Nose.jpg" /></Component><Component Id="I66c9586eaa6b463a8ed73865b47f8696" Guid="415c4da2-24c7-4781-ac1e-535fe132a40c" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I66c9586eaa6b463a8ed73865b47f8696" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1947.689 - The Brooch. Eva Mudocci.jpg" /></Component><Component Id="I737752994abf49458d92ac0794d89252" Guid="08afdb97-4fa9-4c4e-8871-9f311829aa48" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I737752994abf49458d92ac0794d89252" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1951.93 - Calavera of Francisco Madero, from Calavera....jpg" /></Component><Component Id="I9110655ac92c437a8dd56a3d9e81afe7" Guid="d3c4b737-df1d-40f5-b9ed-f3de68b8df74" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I9110655ac92c437a8dd56a3d9e81afe7" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1960.560 - Portrait of an Old Man.jpg" /></Component><Component Id="I3341a434b97546ccb964b289a5f33216" Guid="7de9da3b-6d33-4f99-9095-acb06d469bd6" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I3341a434b97546ccb964b289a5f33216" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1962.83 - Portrait of Dr. Gachet.jpg" /></Component><Component Id="I403189ebcb06499fbe9748db6862b268" Guid="10c03975-49fe-46f5-93b6-7d236a1bcef9" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I403189ebcb06499fbe9748db6862b268" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1963.282 - The Scream.jpg" /></Component><Component Id="If0b93bc8972c4641beef2580115b2176" Guid="a0756424-f219-43c6-a187-a45bad06d8b2" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_If0b93bc8972c4641beef2580115b2176" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1964.74 - The Old Savoyard.jpg" /></Component><Component Id="Ib210b8a35f3145d18b54fc8ffcdcaaa7" Guid="edb05dd4-2051-4ff3-9f65-be83ba743566" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ib210b8a35f3145d18b54fc8ffcdcaaa7" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1965.408 - Young Bull.jpg" /></Component><Component Id="Ib9d943a56bad43eb9b16e97a689c33db" Guid="ebdd06cd-d04f-4f79-86fc-32a085315863" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ib9d943a56bad43eb9b16e97a689c33db" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\1993.248.1813 - Upraised Right Hand, with Palm Facing Outward_....jpg" /></Component><Component Id="I6dcf07734cd54f4da07b881a750b4f8a" Guid="d81b4dd9-c197-4581-887e-04584337229d" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I6dcf07734cd54f4da07b881a750b4f8a" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\2e7b3bf790d6ea5ca0e04cbfbcbe6d2f.jpg" /></Component><Component Id="I169a578a7fff415e85d770280004f3c8" Guid="9973f083-5694-4fd4-9fd7-48ab36214081" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I169a578a7fff415e85d770280004f3c8" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\991f072f4a01d2734d6a6c28024e9b86.jpg" /></Component><Component Id="I947e6228db6a4a04891f6a551f3ab091" Guid="887fc90c-159f-43c8-8dd8-ccbcccd5fc9b" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I947e6228db6a4a04891f6a551f3ab091" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP-22757-001.jpg" /></Component><Component Id="I0359ab2695db4373b65bd142fe00f76b" Guid="e876f2ef-449b-4983-bfea-7ed66d54dd58" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I0359ab2695db4373b65bd142fe00f76b" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP102382.jpg" /></Component><Component Id="I8d6419b47d8e46259df4a86e4ab86814" Guid="f638b0c9-519c-4475-938c-58d4424a0320" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I8d6419b47d8e46259df4a86e4ab86814" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP209114.jpg" /></Component><Component Id="I0e25b39dacdd4ac18b2a62975a10eb21" Guid="047e68a3-b96b-4ac6-a450-cdf898d18922" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I0e25b39dacdd4ac18b2a62975a10eb21" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP800672.jpg" /></Component><Component Id="I1ff1a472c8044bee9a5a334b25beb5ee" Guid="dd93721a-020a-409b-9ac2-1ab25fd942ef" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I1ff1a472c8044bee9a5a334b25beb5ee" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP801180.jpg" /></Component><Component Id="I7c86f5b210354a4783d6d04510668166" Guid="9e7583d9-5989-4093-add9-ac7c8eb089ba" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I7c86f5b210354a4783d6d04510668166" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP801449.jpg" /></Component><Component Id="I046b97d1838944c58f471b0b3d41e6f0" Guid="6a987ea6-9c08-43ac-8c09-1e68e186fb79" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I046b97d1838944c58f471b0b3d41e6f0" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP802529.jpg" /></Component><Component Id="I80da93200ace4c3e9539b8f6a8b3ec84" Guid="2f4f193e-e2fd-4943-b332-1e22288df6ad" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I80da93200ace4c3e9539b8f6a8b3ec84" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP805447.jpg" /></Component><Component Id="I34a9640f75a94e75ba0b1ac43e2cea1d" Guid="a93a712b-84be-4468-9121-2cee57a699a9" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I34a9640f75a94e75ba0b1ac43e2cea1d" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP805603.jpg" /></Component><Component Id="Iadb07545792b49bcb59c25178bb53ae3" Guid="f6037c43-d42a-4b6f-a67c-339dcb120826" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Iadb07545792b49bcb59c25178bb53ae3" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP805813.jpg" /></Component><Component Id="I23adc4816ca1416d8044910652336221" Guid="89c5d92b-80b9-4abb-b5ac-7b11fb109594" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I23adc4816ca1416d8044910652336221" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP807913.jpg" /></Component><Component Id="I645e6cc2e3c94de0b335cc56dd3bca06" Guid="b974b65c-87a5-4f3f-b538-16d5a6bb25e1" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I645e6cc2e3c94de0b335cc56dd3bca06" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP808211 (1).jpg" /></Component><Component Id="I3e6da44502a34c78a7899385a67d9dfb" Guid="c5646b6b-64f3-4c5d-b719-fc4a46aa966d" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I3e6da44502a34c78a7899385a67d9dfb" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP808211.jpg" /></Component><Component Id="I33388b781c5841d7a01211fb30039c1d" Guid="fd77b66f-a5df-447a-bed5-a15294b7d259" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I33388b781c5841d7a01211fb30039c1d" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP808285.jpg" /></Component><Component Id="I44e75f0fb25c418d81cbef1f771ea115" Guid="57d27cbb-c42d-4a64-b87c-6f650f256c07" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I44e75f0fb25c418d81cbef1f771ea115" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP808290.jpg" /></Component><Component Id="I67c118e29a50434a89fc5b58cfa55598" Guid="fd77022f-04cb-4c59-a5d4-feec036175c8" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I67c118e29a50434a89fc5b58cfa55598" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP809438.jpg" /></Component><Component Id="Id74441a3d3f54379a3e7fda0ca50b82a" Guid="5bf495f0-71f4-4fb0-b5bf-09393ab542cb" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Id74441a3d3f54379a3e7fda0ca50b82a" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP811608.jpg" /></Component><Component Id="Icfc3524456694b75a41461d1920f5f97" Guid="98275ed2-9156-4afa-ac9f-7e6a5900a412" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Icfc3524456694b75a41461d1920f5f97" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP811775.jpg" /></Component><Component Id="I3d8d702015414e90875de4a80d9aef2c" Guid="e7b66dde-0b0d-43b8-99c1-9d6023d50ee2" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I3d8d702015414e90875de4a80d9aef2c" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP817806.jpg" /></Component><Component Id="I8e523696861646aa803c00c3e51e494c" Guid="544a5dde-1f37-4b49-843e-c681b3501124" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I8e523696861646aa803c00c3e51e494c" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP819708.jpg" /></Component><Component Id="I6111bf1b1dfe46efb92210d3998a17ab" Guid="9a68de8c-d908-4520-b865-64de527260b2" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I6111bf1b1dfe46efb92210d3998a17ab" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP819803.jpg" /></Component><Component Id="I7648127aa5ce46618ebea526bfe4795e" Guid="02763f86-8bfb-4495-88f9-a2be4f4c5fb8" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I7648127aa5ce46618ebea526bfe4795e" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP825481.jpg" /></Component><Component Id="I5ee90bc941c34694abba28211f7461e0" Guid="caa0ade0-9c48-4a52-8437-561e49a9f595" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I5ee90bc941c34694abba28211f7461e0" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP832656_ff.jpg" /></Component><Component Id="I2c17889a10e143cea3ae1413edc9b838" Guid="1548cea4-5777-4961-941f-88bb5f26140e" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I2c17889a10e143cea3ae1413edc9b838" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP832659.jpg" /></Component><Component Id="I1ed221a663644fc0aecb59fc24fb3aa8" Guid="14a3f709-5ddd-4de5-a629-99c455d04037" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I1ed221a663644fc0aecb59fc24fb3aa8" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP835499.jpg" /></Component><Component Id="I9aaabac85f8549aa830097694ad423b8" Guid="3cc0efa6-9be9-4d2a-8066-fbd174f16805" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I9aaabac85f8549aa830097694ad423b8" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\DP890856.jpg" /></Component><Component Id="Ia8f8d7f7e3284a3096007cad38b21c10" Guid="7c5042e1-1335-4f2d-8656-f5df1978d099" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ia8f8d7f7e3284a3096007cad38b21c10" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\f7ee10bcc82f3c6407ecbbe132226b9c.jpg" /></Component><Component Id="I00b38614a9d042398f44ba14225ca691" Guid="c3217c71-cb9d-45b7-a387-fa379b588a3c" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I00b38614a9d042398f44ba14225ca691" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\images_les_images_1943.3.5596.jpg" /></Component><Component Id="I60c04abc52ac499298f0c9f56fc9b922" Guid="b5b352c4-a810-4b3f-9638-65e86905d02f" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I60c04abc52ac499298f0c9f56fc9b922" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\mississippi_bear_1953.6.2.jpg" /></Component><Component Id="I91d8252389e046f896b52e7687b0322b" Guid="e65a26e2-1dfa-4920-9e32-305b0a2a0ec8" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I91d8252389e046f896b52e7687b0322b" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\papa_contemplant_l_image_de_son_image_1943.3.3041.jpg" /></Component><Component Id="I8e69731e3c7f4e16b2dd7d2da748331d" Guid="7c5f2052-7681-416f-be56-dada72f00e42" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I8e69731e3c7f4e16b2dd7d2da748331d" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\RP-P-1895-A-18968.jpg" /></Component><Component Id="I8a2cebe8763c487492e59a06ced051b7" Guid="dae83c1f-d3bb-43b0-a3bc-4cb3f0b6fb06" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I8a2cebe8763c487492e59a06ced051b7" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\RP-T-1888-A-1510.jpg" /></Component><Component Id="I445082c1f0d64165821c3736bc91a446" Guid="5c1f24e5-5dd6-4b72-82a2-f72c3e229d6b" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I445082c1f0d64165821c3736bc91a446" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\RP-T-1960-138(R).jpg" /></Component><Component Id="I435ade3aabbd4fa7b44b5208f14e3666" Guid="5ca1889e-4654-4d3c-85cc-f9775c12128e" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I435ade3aabbd4fa7b44b5208f14e3666" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\sketch-59a636c80d327a00107a2764.jpg" /></Component><Component Id="I41d22938af714d09951472f4d8eb486b" Guid="6d01a7e0-bf09-4db5-b3a9-d05c32a39bd3" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_I41d22938af714d09951472f4d8eb486b" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\the-stroller-_michael-chesley-johnson_airport-sketch-1024x512.jpg" /></Component><Component Id="Ie3e84783018e4dc195b85d06c1ad6236" Guid="8063326b-6dab-4a3e-8042-28a2308f469d" Win64="$(var.Win64)" KeyPath="yes"><File Id="PathFile_Ie3e84783018e4dc195b85d06c1ad6236" Source="C:\Users\micha\Desktop\Drawing app quick MVP\drawing-inspo\src-tauri\..\library\warmups\_why_did_i_do_it_1943.3.3712.jpg" /></Component></Directory></Directory></Directory>
+            <Component Id="CMP_UninstallShortcut" Guid="*">
+
+                <Shortcut Id="UninstallShortcut"
+						  Name="Uninstall Quiet room"
+						  Description="Uninstalls Quiet room"
+						  Target="[System64Folder]msiexec.exe"
+						  Arguments="/x [ProductCode]" />
+
+				<RemoveFolder Id="INSTALLDIR"
+							  On="uninstall" />
+
+				<RegistryValue Root="HKCU"
+							   Key="Software\drawing\Quiet room"
+							   Name="Uninstaller Shortcut"
+							   Type="integer"
+							   Value="1"
+							   KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
+
+        <DirectoryRef Id="ApplicationProgramsFolder">
+            <Component Id="ApplicationShortcut" Guid="*">
+                <Shortcut Id="ApplicationStartMenuShortcut"
+                    Name="Quiet room"
+                    Description="Runs Quiet room"
+                    Target="[!Path]"
+                    Icon="ProductIcon"
+                    WorkingDirectory="INSTALLDIR">
+                    <ShortcutProperty Key="System.AppUserModel.ID" Value="com.drawing.inspo"/>
+                </Shortcut>
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+                <RegistryValue Root="HKCU" Key="Software\drawing\Quiet room" Name="Start Menu Shortcut" Type="integer" Value="1" KeyPath="yes"/>
+           </Component>
+        </DirectoryRef>
+
+<Feature
+                Id="MainProgram"
+                Title="Application"
+                Description="!(loc.InstallAppFeature)"
+                Level="1"
+                ConfigurableDirectory="INSTALLDIR"
+                AllowAdvertise="no"
+                Display="expand"
+                Absent="disallow">
+
+            <ComponentRef Id="RegistryEntries"/>
+
+<ComponentRef Id="I90e43fd028514fbc9af359109c360a99"/>
+<ComponentRef Id="I1fde3be0a8524ec78af4c0b28c15255c"/>
+<ComponentRef Id="I405af73663ad425d91015c30bd4ddff6"/>
+<ComponentRef Id="I8eb6142cbeb7485dabefcbec98d4222c"/>
+<ComponentRef Id="Ic411f1c51a2a49d599a177abcb181336"/>
+<ComponentRef Id="Ideca47f450fb496ba8fd611a5d2caae3"/>
+<ComponentRef Id="I64c126579ce5423395f56a3c530ee1bc"/>
+<ComponentRef Id="I7f04851f98564599a5975367b8100f20"/>
+<ComponentRef Id="Ie2da920706b4452195b1c83e6643a7a1"/>
+<ComponentRef Id="Ic777c7735c9442a580dc787341e556dd"/>
+<ComponentRef Id="I70d215d071cd4fd19497a3ea65aa0ac1"/>
+<ComponentRef Id="I6397e28e788b447fb0d14ffa652afa93"/>
+<ComponentRef Id="Ie7ac361b2c2b455d84fc0a1e9621dbab"/>
+<ComponentRef Id="I4bb1945042fd4bad94f992a32c45b55a"/>
+<ComponentRef Id="I386693a99d4841f8823c8551979dc88c"/>
+<ComponentRef Id="Ibeff87a4aa5c46df8045f1b2ab10b92c"/>
+<ComponentRef Id="I3dd0254f43ef4e359938f4a74bc8fa2b"/>
+<ComponentRef Id="I052fbcaca0a64a21aa49791049131081"/>
+<ComponentRef Id="Ib5c5ac4132194f75ab62f414c0f0bd62"/>
+<ComponentRef Id="Iac3e6674f6094481921a498ebd6f4b8b"/>
+<ComponentRef Id="I7f503f50012e48b988af1de9242ea7fa"/>
+<ComponentRef Id="Ida70826fdad643efbd5c8911e50551a7"/>
+<ComponentRef Id="I900e7f24962d4f058a9ca2511844d2d5"/>
+<ComponentRef Id="Iac5d32822e78441e9ef3a217ad926911"/>
+<ComponentRef Id="Idd766c327e0e437194022e2c821ca19c"/>
+<ComponentRef Id="I589406e2947f4dd1bf7c2ecf7bdb0efb"/>
+<ComponentRef Id="I134fd621bf98430b8cadb90b77350d3b"/>
+<ComponentRef Id="Ie3f7a319797948d58671e373613bd4aa"/>
+<ComponentRef Id="I112c998ff26b475dae54444c4e779fc6"/>
+<ComponentRef Id="I66c9586eaa6b463a8ed73865b47f8696"/>
+<ComponentRef Id="I737752994abf49458d92ac0794d89252"/>
+<ComponentRef Id="I9110655ac92c437a8dd56a3d9e81afe7"/>
+<ComponentRef Id="I3341a434b97546ccb964b289a5f33216"/>
+<ComponentRef Id="I403189ebcb06499fbe9748db6862b268"/>
+<ComponentRef Id="If0b93bc8972c4641beef2580115b2176"/>
+<ComponentRef Id="Ib210b8a35f3145d18b54fc8ffcdcaaa7"/>
+<ComponentRef Id="Ib9d943a56bad43eb9b16e97a689c33db"/>
+<ComponentRef Id="I6dcf07734cd54f4da07b881a750b4f8a"/>
+<ComponentRef Id="I169a578a7fff415e85d770280004f3c8"/>
+<ComponentRef Id="I947e6228db6a4a04891f6a551f3ab091"/>
+<ComponentRef Id="I0359ab2695db4373b65bd142fe00f76b"/>
+<ComponentRef Id="I8d6419b47d8e46259df4a86e4ab86814"/>
+<ComponentRef Id="I0e25b39dacdd4ac18b2a62975a10eb21"/>
+<ComponentRef Id="I1ff1a472c8044bee9a5a334b25beb5ee"/>
+<ComponentRef Id="I7c86f5b210354a4783d6d04510668166"/>
+<ComponentRef Id="I046b97d1838944c58f471b0b3d41e6f0"/>
+<ComponentRef Id="I80da93200ace4c3e9539b8f6a8b3ec84"/>
+<ComponentRef Id="I34a9640f75a94e75ba0b1ac43e2cea1d"/>
+<ComponentRef Id="Iadb07545792b49bcb59c25178bb53ae3"/>
+<ComponentRef Id="I23adc4816ca1416d8044910652336221"/>
+<ComponentRef Id="I645e6cc2e3c94de0b335cc56dd3bca06"/>
+<ComponentRef Id="I3e6da44502a34c78a7899385a67d9dfb"/>
+<ComponentRef Id="I33388b781c5841d7a01211fb30039c1d"/>
+<ComponentRef Id="I44e75f0fb25c418d81cbef1f771ea115"/>
+<ComponentRef Id="I67c118e29a50434a89fc5b58cfa55598"/>
+<ComponentRef Id="Id74441a3d3f54379a3e7fda0ca50b82a"/>
+<ComponentRef Id="Icfc3524456694b75a41461d1920f5f97"/>
+<ComponentRef Id="I3d8d702015414e90875de4a80d9aef2c"/>
+<ComponentRef Id="I8e523696861646aa803c00c3e51e494c"/>
+<ComponentRef Id="I6111bf1b1dfe46efb92210d3998a17ab"/>
+<ComponentRef Id="I7648127aa5ce46618ebea526bfe4795e"/>
+<ComponentRef Id="I5ee90bc941c34694abba28211f7461e0"/>
+<ComponentRef Id="I2c17889a10e143cea3ae1413edc9b838"/>
+<ComponentRef Id="I1ed221a663644fc0aecb59fc24fb3aa8"/>
+<ComponentRef Id="I9aaabac85f8549aa830097694ad423b8"/>
+<ComponentRef Id="Ia8f8d7f7e3284a3096007cad38b21c10"/>
+<ComponentRef Id="I00b38614a9d042398f44ba14225ca691"/>
+<ComponentRef Id="I60c04abc52ac499298f0c9f56fc9b922"/>
+<ComponentRef Id="I91d8252389e046f896b52e7687b0322b"/>
+<ComponentRef Id="I8e69731e3c7f4e16b2dd7d2da748331d"/>
+<ComponentRef Id="I8a2cebe8763c487492e59a06ced051b7"/>
+<ComponentRef Id="I445082c1f0d64165821c3736bc91a446"/>
+<ComponentRef Id="I435ade3aabbd4fa7b44b5208f14e3666"/>
+<ComponentRef Id="I41d22938af714d09951472f4d8eb486b"/>
+<ComponentRef Id="Ie3e84783018e4dc195b85d06c1ad6236"/>
+
+            <Feature Id="ShortcutsFeature"
+                Title="Shortcuts"
+                Level="1">
+                <ComponentRef Id="Path"/>
+                <ComponentRef Id="CMP_UninstallShortcut" />
+                <ComponentRef Id="ApplicationShortcut" />
+                <ComponentRef Id="ApplicationShortcutDesktop" />
+            </Feature>
+
+            <Feature
+                Id="Environment"
+                Title="PATH Environment Variable"
+                Description="!(loc.PathEnvVarFeature)"
+                Level="1"
+                Absent="allow">
+            <ComponentRef Id="Path"/>
+</Feature>
+        </Feature>
+
+        <Feature Id="External" AllowAdvertise="no" Absent="disallow">
+</Feature>
+
+        <!-- WebView2 -->
+        <Property Id="WVRTINSTALLED">
+            <RegistrySearch Id="WVRTInstalledSystem" Root="HKLM" Key="SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" Name="pv" Type="raw" Win64="no" />
+            <RegistrySearch Id="WVRTInstalledUser" Root="HKCU" Key="SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" Name="pv" Type="raw"/>
+        </Property>
+
+        <CustomAction Id='DownloadAndInvokeBootstrapper' Directory="INSTALLDIR" Execute="deferred" ExeCommand='powershell.exe -NoProfile -windowstyle hidden try [\{] [\[]Net.ServicePointManager[\]]::SecurityProtocol = [\[]Net.SecurityProtocolType[\]]::Tls12 [\}] catch [\{][\}]; Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "$env:TEMP\MicrosoftEdgeWebview2Setup.exe" ; Start-Process -FilePath "$env:TEMP\MicrosoftEdgeWebview2Setup.exe" -ArgumentList (&apos;/silent&apos;, &apos;/install&apos;) -Wait' Return='check'/>
+        <InstallExecuteSequence>
+            <Custom Action='DownloadAndInvokeBootstrapper' Before='InstallFinalize'>
+                <![CDATA[NOT(REMOVE OR WVRTINSTALLED)]]>
+            </Custom>
+        </InstallExecuteSequence>
+
+        <!-- Embedded webview bootstrapper mode -->
+
+        <!-- Embedded offline installer -->
+
+
+
+
+        <InstallExecuteSequence>
+            <Custom Action="LaunchApplication" After="InstallFinalize">AUTOLAUNCHAPP AND NOT Installed</Custom>
+        </InstallExecuteSequence>
+
+        <SetProperty Id="ARPINSTALLLOCATION" Value="[INSTALLDIR]" After="CostFinalize"/>
+    </Product>
+</Wix>

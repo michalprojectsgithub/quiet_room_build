@@ -1,0 +1,51 @@
+[
+  {
+    "id": "wildlife-in-the-forest",
+    "title": "Wildlife In The Forest",
+    "videoId": "F0GOOP82094",
+    "sourceName": "Nature Live Camera",
+    "sourceUrl": "https://www.youtube.com/watch?v=F0GOOP82094"
+  },
+  {
+    "id": "waterfall-in-the-mountains",
+    "title": "Waterfall In The Mountains",
+    "videoId": "4BrvMGznLTo",
+    "sourceName": "Nature Zilla",
+    "sourceUrl": "https://www.youtube.com/watch?v=4BrvMGznLTo"
+  },
+  {
+    "id": "sydney-harbour",
+    "title": "Sydney Harbour",
+    "videoId": "5uZa3-RMFos",
+    "sourceName": "WebcamSydney",
+    "sourceUrl": "https://www.youtube.com/watch?v=5uZa3-RMFos"
+  },
+  {
+    "id": "maldives-beach",
+    "title": "Maldives Beach",
+    "videoId": "_BMi3usEwi8",
+    "sourceName": "Luxury Island",
+    "sourceUrl": "https://www.youtube.com/watch?v=_BMi3usEwi8"
+  },
+  {
+    "id": "seoul-city",
+    "title": "Seoul City",
+    "videoId": "ahSMyLJcp48",
+    "sourceName": "RIVERWORKER",
+    "sourceUrl": "https://www.youtube.com/watch?v=ahSMyLJcp48"
+  },
+  {
+    "id": "fireplace",
+    "title": "Fireplace",
+    "videoId": "9xFr2HRttck",
+    "sourceName": "Relaxing Fire Sound",
+    "sourceUrl": "https://www.youtube.com/watch?v=9xFr2HRttck"
+  },
+  {
+    "id": "seychelles-ocean",
+    "title": "Seychelles Ocean",
+    "videoId": "Thtj8Ht7Z_c",
+    "sourceName": "Luxury Island",
+    "sourceUrl": "https://www.youtube.com/watch?v=Thtj8Ht7Z_c"
+  }
+]

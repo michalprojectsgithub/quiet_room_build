@@ -1,0 +1,292 @@
+/* Scanner modal styles */
+.scan-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  padding: var(--space-5);
+}
+
+.scan-modal {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-strong);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.scan-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.scan-modal-header h3 {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.scan-modal-close {
+  background: transparent;
+  border: 1px solid var(--color-border-default);
+  color: var(--color-text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  /* Center the × glyph precisely */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+  font-size: 18px;
+}
+
+.scan-modal-close:hover {
+  background: var(--color-surface-active);
+  border-color: var(--color-border-strong);
+}
+
+.scan-modal-body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.scan-modal-loading,
+.scan-modal-empty,
+.scan-modal-error {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+}
+
+.scan-modal-error {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.scan-modal-select {
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-default);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  outline: none;
+}
+
+.scan-modal-select:focus {
+  border-color: var(--color-accent);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.scan-modal-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  padding: 0 var(--space-5) var(--space-5);
+}
+
+.scan-modal-button {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  transition: background-color var(--motion-normal) var(--motion-standard),
+    border-color var(--motion-normal) var(--motion-standard),
+    transform var(--motion-fast) var(--motion-standard);
+}
+
+.scan-modal-button.primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.scan-modal-button:hover {
+  background: var(--color-surface-active);
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+.scan-modal-button.primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+.scan-modal-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.scan-modal-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+/* Crop modal */
+.crop-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  padding: 20px;
+}
+
+.crop-modal {
+  background: #0f172a;
+  color: #e5e7eb;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 720px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.crop-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.crop-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.crop-modal-close {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #e5e7eb;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.crop-modal-close:hover {
+  background: #111827;
+  border-color: #475569;
+}
+
+.crop-modal-body {
+  position: relative;
+  background: #0b0f1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  min-height: 300px;
+}
+
+.crop-layer {
+  position: absolute;
+  pointer-events: none;
+}
+
+.crop-modal-image {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.crop-rect {
+  position: absolute;
+  border: 2px dashed #60a5fa;
+  background: rgba(96, 165, 250, 0.15);
+  pointer-events: none;
+}
+
+.crop-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 999px;
+  background: #60a5fa;
+  border: 2px solid #0b0f1a;
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.4);
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.crop-handle.nw { cursor: nwse-resize; }
+.crop-handle.se { cursor: nwse-resize; }
+.crop-handle.ne { cursor: nesw-resize; }
+.crop-handle.sw { cursor: nesw-resize; }
+
+.crop-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 16px 16px;
+  border-top: 1px solid #1f2937;
+}
+
+.crop-modal-button {
+  background: #0b0b0b;
+  color: #ffffff;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.crop-modal-button.primary {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.crop-modal-button:hover {
+  background: #111111;
+  border-color: #444444;
+  transform: translateY(-1px);
+}
+
+.crop-modal-button.primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.crop-modal-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+

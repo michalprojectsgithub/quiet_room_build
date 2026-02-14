@@ -1,0 +1,103 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist",
+    "withGlobalTauri": false
+  },
+  "package": {
+    "productName": "Quiet room",
+    "version": "1.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "dialog": {
+        "all": false,
+        "open": true,
+        "save": true
+      },
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true,
+        "exists": true,
+        "scope": [
+          "$CWD/data",
+          "$RESOURCE/data",
+          "$CWD/library",
+          "$RESOURCE/library",
+          "$APPDATA/Quiet room",
+          "$LOCALAPPDATA/Quiet room",
+          "$HOME/.local/share/Quiet room",
+          "$HOME/Library/Application Support/Quiet room"
+        ]
+      },
+      "path": {
+        "all": true
+      },
+      "window": {
+        "all": false,
+        "create": true,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": []
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "Quiet room",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "fileDropEnabled": true
+      }
+    ],
+    "bundle": {
+      "active": true,
+      "identifier": "com.drawing.inspo",
+      "category": "Productivity",
+      "targets": ["msi", "nsis"],
+      "resources": [
+        "../library/**"
+      ],
+      "icon": [
+        "icons/icon.ico",
+        "icons/icon.png"
+      ],
+      "windows": {
+        "wix": {
+          "language": "en-US",
+          "template": "wix/main.wxs"
+        }
+      }
+    }
+  }
+}

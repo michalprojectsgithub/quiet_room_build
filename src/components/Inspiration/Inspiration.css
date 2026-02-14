@@ -1,0 +1,701 @@
+/* Inspiration Component Styles */
+
+.inspiration-card {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, sans-serif;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  transition: all var(--motion-slow) var(--motion-standard);
+}
+
+.inspiration-header {
+  text-align: left;
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.inspiration-header-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.inspiration-header-subtitle {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  max-width: 640px;
+}
+
+.inspiration-h1 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.inspiration-inspo {
+  margin: var(--space-6) auto var(--space-3); /* center horizontally, tighter gap below */
+  width: 100%;
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  font-size: var(--font-size-2xl);
+  line-height: 1.6;
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--motion-normal) var(--motion-standard);
+  max-width: 480px; /* slightly less width */
+  min-height: 160px; /* a bit more height */
+  display: flex; /* center content */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box; /* include border in max-width */
+  position: relative; /* for top-right icon button */
+}
+
+/* Roll button container to match prompt width */
+.inspiration-roll-container {
+  max-width: 480px;
+  width: 100%;
+  margin: var(--space-3) auto var(--space-3); /* equal spacing above and below */
+  box-sizing: border-box; /* match prompt sizing model */
+}
+
+.inspiration-button-primary-full {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.inspiration-button {
+  cursor: pointer;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-default);
+  background: var(--color-accent);
+  color: #ffffff;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  transition: all var(--motion-normal) var(--motion-standard);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  min-width: 140px;
+  text-align: center;
+}
+
+.inspiration-button:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+.inspiration-small-btn {
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--color-border-default);
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xs);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+.inspiration-new-palette-btn {
+  background: transparent;
+  border-color: var(--color-border-strong);
+}
+
+.inspiration-new-palette-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-border-strong);
+}
+
+.inspiration-small-btn:hover {
+  background: var(--color-surface-active);
+}
+
+.inspiration-muted {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+}
+
+.inspiration-saved-section {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-default);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+/* Modal for saved prompts */
+.inspiration-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(8px);
+}
+
+.inspiration-modal-content {
+  background: var(--color-surface-raised);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-default);
+  width: min(680px, 92vw);
+  position: relative;
+  box-shadow: var(--shadow-strong);
+}
+
+.inspiration-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.inspiration-saved-title {
+  margin: 0 0 16px;
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: var(--font-weight-semibold);
+}
+
+.inspiration-saved-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inspiration-saved-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border-subtle);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+.inspiration-saved-item:hover {
+  background: var(--color-surface-active);
+}
+
+.inspiration-saved-prompt {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.inspiration-history-section {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-default);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+.inspiration-history-title {
+  margin: 0 0 16px;
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: var(--font-weight-semibold);
+}
+
+.inspiration-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inspiration-history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border-subtle);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+.inspiration-history-item:hover {
+  background: var(--color-surface-active);
+}
+
+.inspiration-history-number {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  margin-right: 12px;
+  font-size: var(--font-size-xs);
+}
+
+.inspiration-history-prompt {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.inspiration-palette-section {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-default);
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+.inspiration-palette-title {
+  margin: 0 0 16px;
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: var(--font-weight-semibold);
+}
+
+.inspiration-palette-display {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inspiration-color-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Place New Palette button to the right on the same row */
+.inspiration-palette-display .inspiration-new-palette-btn {
+  margin-left: auto;
+}
+
+.inspiration-color-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all var(--motion-normal) var(--motion-standard);
+}
+
+.inspiration-color-box:hover {
+  transform: scale(1.05);
+}
+
+.inspiration-color-code {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  font-family: monospace;
+}
+
+.inspiration-palette-toggle {
+  margin: var(--space-3) auto var(--space-3); /* match prompt↔button spacing above/below */
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border-strong);
+  transition: all var(--motion-normal) var(--motion-standard);
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Removed checkbox UI (palette toggled via icon in prompt) */
+
+.inspiration-palette-display-inline {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* Focus mode button styles */
+/* Icon button (match references fullscreen icon buttons) */
+.inspiration-icon-button {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--motion-normal) var(--motion-standard),
+    border-color var(--motion-normal) var(--motion-standard);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.inspiration-icon-button:hover:not(:disabled) {
+  background: var(--color-surface-active);
+  border-color: var(--color-border-strong);
+}
+
+.inspiration-icon-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icon inside prompt window (top-right) */
+.inspiration-inspo-action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+.inspiration-inspo-action-left {
+  right: 52px; /* place to the left of the search icon */
+}
+
+/* Icon to the immediate left of search (saved list) */
+.inspiration-inspo-action-right2 {
+  position: absolute;
+  top: 8px;
+  right: 52px;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+/* Top-left arrow controls */
+.inspiration-inspo-action-tl {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+.inspiration-inspo-action-tl2 {
+  position: absolute;
+  top: 8px;
+  left: 52px;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+/* Bottom-left action in prompt window */
+.inspiration-inspo-action-bl {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+/* Bottom-right save icon */
+.inspiration-inspo-action-br {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+.inspiration-icon-button.active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent) inset;
+}
+
+/* Top bar layout: category on left, focus mode on right */
+.inspiration-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.inspiration-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.inspiration-topbar .inspiration-category-filter {
+  margin-bottom: 0;
+}
+
+/* Category filter styles */
+.inspiration-category-filter {
+  margin-bottom: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.inspiration-category-label {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.inspiration-category-select {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: var(--font-size-md);
+  min-width: 150px;
+  cursor: pointer;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.inspiration-category-select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* Error message styles */
+.inspiration-error {
+  margin-top: var(--space-4);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(242, 109, 109, 0.12);
+  border: 1px solid rgba(242, 109, 109, 0.3);
+  color: var(--color-danger);
+  font-size: var(--font-size-md);
+}
+
+/* Button group styles */
+.inspiration-button-group {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* Generated image styles */
+.inspiration-generated-image {
+  margin-top: var(--space-4);
+}
+
+.inspiration-generated-image img {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.inspiration-image-tip {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Button variants */
+.inspiration-button-blue {
+  background: var(--color-info);
+}
+
+.inspiration-button-blue:hover {
+  background: #4a9ce8;
+}
+
+.inspiration-button-orange {
+  background: var(--color-warning);
+}
+
+.inspiration-button-orange:hover {
+  background: #e3a649;
+}
+
+.inspiration-button-purple {
+  background: var(--color-accent);
+}
+
+.inspiration-button-purple:hover {
+  background: var(--color-accent-hover);
+}
+
+.inspiration-button-green {
+  background: var(--color-success);
+}
+
+.inspiration-button-green:hover {
+  background: #2fb36c;
+}
+
+.inspiration-button-indigo {
+  background: var(--color-accent);
+}
+
+.inspiration-button-indigo:hover {
+  background: var(--color-accent-active);
+}
+
+.inspiration-button-red {
+  background: var(--color-warning);
+}
+
+.inspiration-button-red:hover {
+  background: #e0913f;
+}
+
+.inspiration-button-danger {
+  background: var(--color-danger);
+}
+
+.inspiration-button-danger:hover {
+  background: #d45858;
+}
+
+/* Disabled states */
+.inspiration-button:disabled,
+.inspiration-button-blue:disabled,
+.inspiration-button-orange:disabled,
+.inspiration-button-purple:disabled,
+.inspiration-button-green:disabled,
+.inspiration-button-indigo:disabled,
+.inspiration-button-red:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.inspiration-button:disabled:hover,
+.inspiration-button-blue:disabled:hover,
+.inspiration-button-orange:disabled:hover,
+.inspiration-button-purple:disabled:hover,
+.inspiration-button-green:disabled:hover,
+.inspiration-button-indigo:disabled:hover,
+.inspiration-button-red:disabled:hover {
+  transform: none;
+}
+
+/* Sub-tabs Navigation */
+.inspiration-sub-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: var(--space-8);
+  border-bottom: 1px solid var(--color-border-default);
+  padding-bottom: var(--space-4);
+  position: relative;
+}
+
+.inspiration-sub-tab-button {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--motion-normal) var(--motion-standard);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  outline: none;
+  user-select: none;
+  position: relative;
+}
+
+.inspiration-sub-tab-button:hover:not(:disabled) {
+  background: var(--color-surface-active);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+  color: var(--color-text-primary);
+}
+
+.inspiration-sub-tab-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.inspiration-sub-tab-button.active {
+  background: var(--color-accent);
+  box-shadow: var(--shadow-glow);
+  color: #ffffff;
+  font-weight: var(--font-weight-semibold);
+}
+
+.inspiration-sub-tab-button.active:hover {
+  background: var(--color-accent-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.inspiration-sub-tab-label {
+  font-weight: inherit;
+  letter-spacing: 0.3px;
+}
+
+.inspiration-content {
+  min-height: 400px;
+  position: relative;
+}
+
+/* Responsive Design for Sub-tabs */
+@media (max-width: 768px) {
+  .inspiration-sub-tabs {
+    gap: var(--space-1);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-3);
+  }
+
+  .inspiration-sub-tab-button {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .inspiration-sub-tabs {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .inspiration-sub-tab-button {
+    justify-content: flex-start;
+    padding: 12px 16px;
+  }
+}
