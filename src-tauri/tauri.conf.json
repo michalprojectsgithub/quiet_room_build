@@ -84,7 +84,7 @@
       "active": true,
       "identifier": "com.drawing.inspo",
       "category": "Productivity",
-      "targets": ["msi", "nsis"],
+      "targets": ["msi", "nsis", "dmg"],
       "resources": [
         "../library/**"
       ],
