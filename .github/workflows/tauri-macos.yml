@@ -31,10 +31,16 @@ jobs:
       - name: Build macOS bundle
         run: npm run tauri build -- --verbose
 
+      - name: List bundle outputs
+        run: |
+          ls -la src-tauri/target/release || true
+          ls -la src-tauri/target/release/bundle || true
+          find src-tauri/target/release/bundle -maxdepth 3 -type f || true
+
       - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: macos-bundles
           path: |
-            src-tauri/target/release/bundle/dmg/*.dmg
-            src-tauri/target/release/bundle/macos/*.app
+            src-tauri/target/release/bundle/**
+          if-no-files-found: error
